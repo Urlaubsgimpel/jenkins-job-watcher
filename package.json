@@ -1,14 +1,14 @@
 {
-  "name": "jenkins-light",
-  "version": "1.0.0",
-  "description": "A light controller for Jenkins",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-	"jenkins-api": ">= 0.2.6"
-  },
-  "author": "",
-  "license": "ISC"
+    "name": "jenkins-watcher",
+    "version": "0.1.0",
+    "description": "Watches Jenkins jobs and executes shell commands accordingly.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "dependencies": {
+        "jenkins-api": ">= 0.2.6"
+    },
+    "author": "Roman Tilgner",
+    "license": "MIT"
 }
