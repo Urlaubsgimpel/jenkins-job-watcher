@@ -1,0 +1,23 @@
+{
+	"jenkinsUrl": "http://localhost:8080/",
+	"checkInterval": 5000,
+	"maximumRetries": -1,
+	"stopAfterOnePositiveCheck": true,
+	"watchedJobs": [
+		"Test"
+	],
+	"checks": [
+		{
+			"name": "One Build Failed",
+			"scope": "one",
+			"status": "red",
+			"command": "blahr"
+		},
+		{
+			"name": "All Builds Ok",
+			"scope": "all",
+			"status": "blue",
+			"command": "blubb"
+		}
+	]
+}
