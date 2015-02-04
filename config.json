@@ -1,0 +1,48 @@
+{
+    "jenkinsUrl": "http://localhost:8080/",
+    "checkInterval": 5000,
+    "maximumRetries": -1,
+    "stopAfterOnePositiveCheck": true,
+    "onlyExecuteCommandOnChange": true,
+    "startupCommand": "echo Startup",
+    "watchedJobs": [
+        "Test"
+    ],
+    "checks": [
+        {
+            "id": "Building A Job",
+            "scope": "one",
+            "status": [
+                "red_anime",
+                "blue_anime",
+                "yellow_anime",
+                "grey_anime",
+                "notbuilt_anime",
+                "aborted_anime",
+                "disabled_anime"
+            ],
+            "command": "echo Building"
+        },
+        {
+            "id": "One Build Not Ok",
+            "scope": "one",
+            "status": [
+                "red",
+                "yellow"
+            ],
+            "command": "echo Not Ok"
+        },
+        {
+            "id": "All Builds Ok",
+            "scope": "all",
+            "status": [
+                "blue",
+                "notbuilt",
+                "aborted",
+                "grey",
+                "disabled"
+            ],
+            "command": "echo Ok"
+        }
+    ]
+}
