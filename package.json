@@ -1,8 +1,8 @@
 {
-    "name": "jenkins-watcher",
-    "version": "0.1.0",
+    "name": "jenkins-job-watcher",
+    "version": "1.0.0",
     "description": "Watches Jenkins jobs and executes shell commands accordingly.",
-    "main": "index.js",
+    "main": "jenkinsjobwatcher.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
