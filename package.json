@@ -1,14 +1,18 @@
 {
-    "name": "jenkins-job-watcher",
-    "version": "1.0.0",
-    "description": "Watches Jenkins jobs and executes shell commands accordingly.",
-    "main": "jenkinsjobwatcher.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "dependencies": {
-        "jenkins-api": ">= 0.2.6"
-    },
-    "author": "Roman Tilgner",
-    "license": "MIT"
+  "name": "jenkins-job-watcher",
+  "version": "1.0.0",
+  "description": "Watches Jenkins jobs and executes shell commands accordingly.",
+  "main": "jenkinsjobwatcher.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Roman Tilgner",
+  "license": "MIT",
+  "dependencies": {
+    "jenkins-api": "^0.2.6"
+  },
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Urlaubsgimpel/jenkins-job-watcher"
+  }
 }

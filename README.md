@@ -2,10 +2,16 @@
 
 Use the JenkinsJobWatcher class to watch the status of your Jenkins jobs. You are able to provide your own check conditions and get notified if a check is positive.
 
+## Install
+
+	npm install --save jenkins-job-watcher
+
 ## Usage
 
 This is an example call with all possible options:
 
+	var JenkinsJobWatcher = require('jenkins-job-watcher');
+	
     var jobWatcher = new JenkinsJobWatcher({
         "jenkinsUrl": "http://localhost:8080/",
         "checkInterval": 5000,
