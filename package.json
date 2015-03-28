@@ -1,6 +1,6 @@
 {
   "name": "jenkins-job-watcher",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Watches Jenkins jobs and executes shell commands accordingly.",
   "main": "jenkinsjobwatcher.js",
   "scripts": {
