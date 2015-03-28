@@ -152,7 +152,16 @@ var JenkinsJobWatcher = function (options) {
         for (var i = 0; i < condition.status.length; i++) {
             var status = condition.status[i];
             if (statuses.hasOwnProperty(status)) {
-                return true;
+                if (condition.pattern) {
+                    for (var j = 0; j <= statuses[status].length; j++) {
+                        if (condition.pattern.test(statuses[status][j])) {
+                            return true;
+                        }
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
             }
         }
         return false;
@@ -169,8 +178,6 @@ var JenkinsJobWatcher = function (options) {
         } else {
             self.emit('checkPositive', check);
         }
-
-
     };
 
 };

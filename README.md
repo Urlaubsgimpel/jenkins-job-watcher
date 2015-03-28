@@ -40,6 +40,19 @@ This is an example call with all possible options:
                 ]
             },
             {
+                "id": "Release Failed",
+                "conditions": [
+                    {
+                        "scope": "one",
+                        "pattern": /.*-release/,
+                        "status": [
+                            "red",
+                            "yellow"
+                        ]
+                    }
+                ]
+            },
+            {
                 "id": "Failed",
                 "conditions": [
                     {
