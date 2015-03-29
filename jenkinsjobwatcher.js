@@ -56,6 +56,8 @@ var JenkinsJobWatcher = function (options) {
     var timeout = null;
     var lastNotifiedCheckId = null;
     var jenkins = jenkinsApi.init(options.jenkinsUrl);
+    var statuses = null;
+    var jobs = null;
 
     /**
      * Starts the watcher. It will start checking the Jenkins periodically
@@ -78,13 +80,14 @@ var JenkinsJobWatcher = function (options) {
     };
 
     var checkJenkins = function () {
-        jenkins.all_jobs(function jenkinsCallback(err, jobs) {
+        jenkins.all_jobs(function jenkinsCallback(err, allJobs) {
             if (err) {
                 self.emit('error', err);
                 retries++;
             } else {
                 retries = 0;
-                processChecks(jobs);
+                jobs = allJobs;
+                processChecks();
             }
             if (options.maximumRetries === -1 || retries <= options.maximumRetries) {
                 timeout = setTimeout(checkJenkins, options.checkInterval);
@@ -94,12 +97,13 @@ var JenkinsJobWatcher = function (options) {
         });
     };
 
-    var processChecks = function (jobs) {
+    var processChecks = function () {
+        filterJobs();
         if (jobs.length === 0) return;
-        var statuses = buildStatusMap(jobs);
+        buildStatusMap();
         for (var i = 0; i < options.checks.length; i++) {
             var check = options.checks[i];
-            var checkPositive = performCheck(check, statuses);
+            var checkPositive = performCheck(check);
             if (checkPositive) {
                 executeCheck(check);
                 if (options.stopAfterOnePositiveCheck) {
@@ -111,33 +115,42 @@ var JenkinsJobWatcher = function (options) {
         }
     };
 
-    var buildStatusMap = function (jobs) {
-        var statuses = {};
-        statuses._sum = 0;
-        for (var i = 0; i < jobs.length; i++) {
-            var job = jobs[i];
-            if (options.watchedJobs && options.watchedJobs.indexOf(job.name) === -1) continue;
-            if (!statuses.hasOwnProperty(job.color)) {
-                statuses[job.color] = [];
+    var filterJobs = function () {
+        if (options.watchedJobs) {
+            for (var i = 0; i < jobs.length; i++) {
+                var job = jobs[i];
+                if (options.watchedJobs.indexOf(job.name) === -1) {
+                    jobs.splice(i, 0);
+                    i--;
+                }
             }
-            statuses[job.color].push(job.name);
-            statuses._sum++;
         }
-        return statuses;
     };
 
-    var performCheck = function (check, statuses) {
+    var buildStatusMap = function () {
+        var statusMap = {};
+        for (var i = 0; i < jobs.length; i++) {
+            var job = jobs[i];
+            if (!statusMap.hasOwnProperty(job.color)) {
+                statusMap[job.color] = [];
+            }
+            statusMap[job.color].push(job.name);
+        }
+        statuses = statusMap;
+    };
+
+    var performCheck = function (check) {
         for (var i = 0; i < check.conditions.length; i++) {
             var condition = check.conditions[i];
-            if ((condition.scope === 'all' && !checkForAll(condition, statuses)) ||
-                (condition.scope === 'one' && !checkForOne(condition, statuses))) {
+            if ((condition.scope === 'all' && !checkForAll(condition)) ||
+                (condition.scope === 'one' && !checkForOne(condition))) {
                 return false;
             }
         }
         return true;
     };
 
-    var checkForAll = function (condition, statuses) {
+    var checkForAll = function (condition) {
         var sum = 0;
         for (var i = 0; i < condition.status.length; i++) {
             var status = condition.status[i];
@@ -145,10 +158,10 @@ var JenkinsJobWatcher = function (options) {
                 sum += statuses[status].length;
             }
         }
-        return sum === statuses._sum;
+        return sum === jobs.length;
     };
 
-    var checkForOne = function (condition, statuses) {
+    var checkForOne = function (condition) {
         for (var i = 0; i < condition.status.length; i++) {
             var status = condition.status[i];
             if (statuses.hasOwnProperty(status)) {
@@ -170,13 +183,13 @@ var JenkinsJobWatcher = function (options) {
     var executeCheck = function (check) {
         if (options.onlyNotifyOnChange) {
             if (lastNotifiedCheckId !== check.id) {
-                self.emit('checkPositive', check);
+                self.emit('checkPositive', check, jobs, statuses);
                 lastNotifiedCheckId = check.id;
             } else {
-                self.emit('checkSame', check);
+                self.emit('checkSame', check, jobs, statuses);
             }
         } else {
-            self.emit('checkPositive', check);
+            self.emit('checkPositive', check, jobs, statuses);
         }
     };
 

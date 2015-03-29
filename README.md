@@ -1,6 +1,7 @@
 # jenkins-job-watcher
 
-Use the JenkinsJobWatcher class to watch the status of your Jenkins jobs. You are able to provide your own check conditions and get notified if a check is positive.
+Use the JenkinsJobWatcher class to watch the status of your Jenkins jobs. You are able to provide your own check
+conditions and get notified if a check is positive.
 
 ## Install
 
@@ -82,17 +83,22 @@ This is an example call with all possible options:
         ]
     });
 
-You can define multiple conditions per check. The check is considered true only if all of its containing conditions are true. The checks are executed in the order they were defined.
+You can define multiple conditions per check. The check is considered true only if all of its containing conditions are
+true. The checks are executed in the order they were defined.
 
 ## Events
 
 The JenkinsJobWatcher is also an EventEmitter and emits the following events:
 
 * __checkPositive__
-Emitted when a check is true. The argument of the event is the corresponding check object.
+Emitted when a check is true. The arguments of the event are the corresponding check object, an array with all watched
+jobs and a map from status name to arrays from job names.
 * __checkSame__
-Emitted when the option "onlyNotifyOnChange" is set to true and the check still evaluates to true. The argument of the event is the corresponding check object.
+Emitted when the option "onlyNotifyOnChange" is set to true and the check still evaluates to true. The arguments of the
+event are the corresponding check object, an array with all watched jobs and a map from status name to arrays from job
+names.
 * __checkNegative__
-Emitted when a check is false. The argument of the event is the corresponding check object.
+Emitted when a check is false. The arguments of the event are the corresponding check object, an array with all watched
+jobs and a map from status name to arrays from job names.
 * __error__
 Emitted when an error occurred. The argument of the event is the error.
